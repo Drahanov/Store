@@ -64,8 +64,10 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
     implementation(libs.room)
-
+    implementation(libs.room.coroutines)
     implementation(libs.hilt)
+
+    kapt(libs.room.compiler)
     kapt(libs.hilt.compiler)
 
     annotationProcessor(libs.room.compiler)

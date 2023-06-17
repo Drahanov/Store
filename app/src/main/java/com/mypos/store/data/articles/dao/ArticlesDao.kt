@@ -1,0 +1,28 @@
+package com.mypos.store.data.articles.dao
+
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
+import com.mypos.store.domain.articles.model.ArticleEntity
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface ArticlesDao {
+    @Insert
+    suspend fun addArticle(articleEntity: ArticleEntity)
+
+    @Delete
+    suspend fun removeArticle(articleEntity: ArticleEntity)
+
+    @Update
+    suspend fun updateArticle(articleEntity: ArticleEntity)
+
+    @Query("SELECT * FROM articles_table ORDER BY id ASC")
+    fun readAllArticles(): Flow<List<ArticleEntity>>
+
+    @Query("SELECT * FROM articles_table WHERE id=:id")
+    fun getArticleById(id: Int): Flow<ArticleEntity>
+
+}
