@@ -1,5 +1,6 @@
 package com.mypos.store.domain.articles.model
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.Date
@@ -11,8 +12,9 @@ data class ArticleEntity(
     val name: String,
     val category: Int,
     val shortDescription: String,
-    val fullDescriptwion: String,
+    val fullDescription: String,
     val price: Double,
     val addDate: Date,
-    val image: Byte
+    @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
+    var data: ByteArray? = null
 )
