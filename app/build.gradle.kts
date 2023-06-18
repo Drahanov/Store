@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.hilt)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+    implementation("io.coil-kt:coil-compose:2.4.0")
 
     kapt(libs.room.compiler)
     kapt(libs.hilt.compiler)

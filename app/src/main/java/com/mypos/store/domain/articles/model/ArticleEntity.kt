@@ -16,5 +16,5 @@ data class ArticleEntity(
     val price: Double,
     val addDate: Date,
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB)
-    var data: ByteArray? = null
+    var image: ByteArray? = null
 )

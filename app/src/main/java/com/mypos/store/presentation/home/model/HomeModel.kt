@@ -8,7 +8,8 @@ import com.mypos.store.presentation.base.model.UiState
 class HomeModel {
     data class HomeUiState(
         val isLoading: Boolean = false,
-        val articles: List<ArticleEntity> = emptyList()
+        val articles: List<ArticleEntity> = emptyList(),
+        val cart: HashMap<Int, Int> = HashMap()
     ) : UiState
 
     sealed class HomeUiEvent : UiEvent {

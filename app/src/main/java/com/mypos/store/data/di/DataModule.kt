@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.room.Room
 import com.mypos.store.data.articles.dao.ArticlesDao
 import com.mypos.store.data.articles.repository.ArticlesRepositoryImpl
+import com.mypos.store.data.cart.CartRepositoryImpl
 import com.mypos.store.data.database.StoreDatabase
 import com.mypos.store.domain.articles.repository.ArticlesRepository
+import com.mypos.store.domain.cart.repository.CartRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -36,5 +38,9 @@ object DataModule {
     @Provides
     fun provideLanguagesRepository(dao: ArticlesDao): ArticlesRepository =
         ArticlesRepositoryImpl(dao)
+
+    @Singleton
+    @Provides
+    fun provideCartRepository(): CartRepository = CartRepositoryImpl()
 
 }

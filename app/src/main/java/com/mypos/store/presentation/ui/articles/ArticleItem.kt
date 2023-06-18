@@ -1,6 +1,11 @@
 package com.mypos.store.presentation.ui.articles
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -12,9 +17,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalMinimumTouchTargetEnforcement
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -26,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -33,12 +44,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mypos.store.R
+import com.mypos.store.domain.articles.model.ArticleEntity
 
-@Preview
+
+fun convertImageByteArrayToBitmap(imageData: ByteArray): Bitmap {
+    return BitmapFactory.decodeByteArray(imageData, 0, imageData.size)
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArticleItem(
-
+    article: ArticleEntity
 ) {
     val expanded = remember { mutableStateOf(false) }
     CompositionLocalProvider(
@@ -62,17 +78,18 @@ fun ArticleItem(
                     .padding(10.dp)
                     .fillMaxSize()
             ) {
-                Image(
-                    painter = painterResource(R.drawable.image),
-                    contentDescription = "test image",
-                    modifier = Modifier
-                        .clip(RoundedCornerShape(10.dp))
-                        .width(100.dp)
-                        .height(100.dp)
-                )
+                if (article.image != null) {
+                    Image(
+                        bitmap = convertImageByteArrayToBitmap(imageData = article.image!!).asImageBitmap(),
+                        contentDescription = "image",
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .width(100.dp)
+                            .height(100.dp)
+                    )
+                }
                 Row(
                     modifier = Modifier
-                        .padding(start = 5.dp)
                         .fillMaxHeight(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -83,16 +100,16 @@ fun ArticleItem(
                             .padding(end = 5.dp)
                     ) {
                         Row {
-                            Text(text = "Super man shoes", fontWeight = FontWeight.Bold)
+                            Text(text = article.name, fontWeight = FontWeight.Bold)
                         }
                         Text(
                             fontSize = 12.sp,
                             maxLines = 3,
                             overflow = TextOverflow.Ellipsis,
-                            text = "Short description about this shoes about this shoes about this shoes "
+                            text = article.shortDescription
                         )
                         Text(
-                            text = "12$",
+                            text = article.price.toString() + "$",
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
                             modifier = Modifier
@@ -100,11 +117,31 @@ fun ArticleItem(
                                 .wrapContentHeight()
                         )
                     }
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        IconButton(
+                            onClick = { /*TODO*/ },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowUp,
+                                contentDescription = "Cart",
+                                tint = Color.Black
+                            )
+                        }
+                        Text(text = "1")
+                        IconButton(
+                            onClick = { /*TODO*/ },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowDown,
+                                contentDescription = "Cart",
+                                tint = Color.Black
+                            )
+                        }
+                    }
 
-                    Icon(
-                        imageVector = Icons.Default.ShoppingCart,
-                        contentDescription = "Cart"
-                    )
                 }
             }
         }

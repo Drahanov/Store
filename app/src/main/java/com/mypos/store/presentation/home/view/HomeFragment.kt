@@ -5,16 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
+import android.widget.Toast
 import androidx.compose.runtime.collectAsState
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
 import com.mypos.store.R
 import com.mypos.store.databinding.FragmentHomeBinding
 import com.mypos.store.presentation.base.viewmodel.observeIn
 import com.mypos.store.presentation.home.model.HomeModel
 import com.mypos.store.presentation.home.viewmodel.HomeViewModel
-import com.mypos.store.presentation.ui.articles.ArticleItem
+import com.mypos.store.presentation.ui.buttons.AddNewButton
+import com.mypos.store.presentation.ui.articles.ArticlesList
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 
@@ -41,11 +42,11 @@ class HomeFragment : Fragment() {
         viewModel.setEvent(HomeModel.HomeUiEvent.LoadArticles)
 
         initCompose()
-
         return view
     }
 
     private fun onHandleState(state: HomeModel.HomeUiState) {
+        Toast.makeText(requireContext(), state.cart.size.toString(), Toast.LENGTH_SHORT).show()
         if (state.isLoading) {
             binding.progressBar.visibility = View.VISIBLE
         } else {
@@ -54,18 +55,23 @@ class HomeFragment : Fragment() {
     }
 
     private fun initCompose() {
+        binding.addNewButton.apply {
+            setContent {
+                AddNewButton() {
+                    try {
+                        Navigation.findNavController(binding.root).navigate(
+                            R.id.action_homeFragment_to_addNewFragment
+                        )
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
         binding.articlesList.apply {
             setContent {
                 val state = viewModel.uiState.collectAsState().value
-                Column() {
-                    ArticleItem()
-                    ArticleItem()
-                    ArticleItem()
-                    ArticleItem()
-                    ArticleItem()
-                    ArticleItem()
-                }
-
+                ArticlesList(state.articles)
             }
         }
     }

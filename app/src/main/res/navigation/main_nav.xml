@@ -9,7 +9,7 @@
         android:id="@+id/homeFragment"
         android:name="com.mypos.store.presentation.home.view.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_homeFragment_to_cartFragment"
             app:destination="@id/cartFragment" />
@@ -25,7 +25,7 @@
         android:name="com.mypos.store.presentation.cart.view.CartFragment"
         android:label="fragment_cart"
         tools:layout="@layout/fragment_cart" />
-    <fragment
+    <dialog
         android:id="@+id/addNewFragment"
         android:name="com.mypos.store.presentation.addNew.view.AddNewFragment"
         android:label="fragment_add_new"
