@@ -120,4 +120,9 @@ class AddNewFragment : BottomSheetDialogFragment() {
         binding.fullDescription.editText?.text?.clear()
         binding.shortDescription.editText?.text?.clear()
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
 }

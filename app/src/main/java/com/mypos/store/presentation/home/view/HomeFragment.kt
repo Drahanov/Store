@@ -68,10 +68,27 @@ class HomeFragment : Fragment() {
                 }
             }
         }
+
+        binding.cartButton.apply {
+            setContent {
+                AddNewButton() {
+                    try {
+                        Navigation.findNavController(binding.root).navigate(
+                            R.id.action_homeFragment_to_cartFragment
+                        )
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
+            }
+        }
         binding.articlesList.apply {
             setContent {
                 val state = viewModel.uiState.collectAsState().value
-                ArticlesList(state.articles)
+                ArticlesList(state.articles, state.cart) { increase, id ->
+                    viewModel.setEvent(HomeModel.HomeUiEvent.AddToCart(increase, id))
+                }
+
             }
         }
     }

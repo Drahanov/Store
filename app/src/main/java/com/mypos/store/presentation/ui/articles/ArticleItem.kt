@@ -54,7 +54,9 @@ fun convertImageByteArrayToBitmap(imageData: ByteArray): Bitmap {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ArticleItem(
-    article: ArticleEntity
+    article: ArticleEntity,
+    amountInCart: Int,
+    cartButtonListener: (increase: Boolean, id: Int) -> Unit
 ) {
     val expanded = remember { mutableStateOf(false) }
     CompositionLocalProvider(
@@ -109,7 +111,7 @@ fun ArticleItem(
                             text = article.shortDescription
                         )
                         Text(
-                            text = article.price.toString() + "$",
+                            text = if (amountInCart != 0) (amountInCart * article.price).toString() + "$" else article.price.toString() + "$",
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
                             modifier = Modifier
@@ -122,7 +124,7 @@ fun ArticleItem(
                         verticalArrangement = Arrangement.Center
                     ) {
                         IconButton(
-                            onClick = { /*TODO*/ },
+                            onClick = { cartButtonListener.invoke(true, article.id) },
                         ) {
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowUp,
@@ -130,9 +132,9 @@ fun ArticleItem(
                                 tint = Color.Black
                             )
                         }
-                        Text(text = "1")
+                        Text(text = amountInCart.toString())
                         IconButton(
-                            onClick = { /*TODO*/ },
+                            onClick = { cartButtonListener.invoke(false, article.id) },
                         ) {
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowDown,

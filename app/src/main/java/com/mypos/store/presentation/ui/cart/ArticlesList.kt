@@ -1,4 +1,4 @@
-package com.mypos.store.presentation.ui.articles
+package com.mypos.store.presentation.ui.cart
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.items
 import com.mypos.store.domain.articles.model.ArticleEntity
+import com.mypos.store.presentation.ui.articles.ArticleItem
 
 @Composable
 fun ArticlesList(
@@ -18,8 +19,6 @@ fun ArticlesList(
         items(items = articles) { article ->
             if (cartState.containsKey(article.id)) {
                 cartState[article.id]?.let { ArticleItem(article, it, cartClickListener) }
-            } else {
-                ArticleItem(article, 0, cartClickListener)
             }
         }
     }

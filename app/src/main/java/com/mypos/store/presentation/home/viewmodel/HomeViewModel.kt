@@ -7,6 +7,7 @@ import com.mypos.store.presentation.base.viewmodel.BaseViewModel
 import com.mypos.store.presentation.home.model.HomeModel.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,17 +28,14 @@ class HomeViewModel @Inject constructor(
                     }
                 }
                 viewModelScope.launch {
-                    cartRepository.collectCart().collect() {
+                    cartRepository.cartState.collectLatest {
                         setState { copy(cart = it) }
                     }
-
                 }
+            }
 
-                viewModelScope.launch {
-                    delay(4000)
-                    cartRepository.addToCart(12)
-
-                }
+            is HomeUiEvent.AddToCart -> {
+                cartRepository.addToCart(event.id, event.shouldIncrease)
             }
         }
     }

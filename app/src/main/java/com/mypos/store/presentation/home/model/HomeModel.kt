@@ -14,6 +14,7 @@ class HomeModel {
 
     sealed class HomeUiEvent : UiEvent {
         object LoadArticles : HomeUiEvent()
+        data class AddToCart(val shouldIncrease: Boolean, val id: Int) : HomeUiEvent()
     }
 
     class HomeUiEffect : UiSideEffect

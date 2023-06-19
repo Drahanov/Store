@@ -1,8 +1,8 @@
 package com.mypos.store.domain.cart.repository
 
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 interface CartRepository {
-    fun collectCart(): Flow<HashMap<Int, Int>>
-    suspend fun addToCart(id: Int)
+    val cartState: StateFlow<HashMap<Int, Int>>
+    suspend fun addToCart(id: Int, increase: Boolean)
 }
