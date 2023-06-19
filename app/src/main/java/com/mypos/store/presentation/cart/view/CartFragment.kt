@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.compose.runtime.collectAsState
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
+import com.mypos.store.R
 import com.mypos.store.databinding.FragmentCartBinding
 import com.mypos.store.presentation.base.viewmodel.observeIn
 import com.mypos.store.presentation.cart.model.CartModel
@@ -35,11 +37,19 @@ class CartFragment : Fragment() {
             .onEach(::onHandleState)
             .observeIn(this)
 
+        binding.buttonConfirm.setOnClickListener {
+            try {
+                Navigation.findNavController(binding.root).navigate(
+                    R.id.action_cartFragment_to_confirmationFragment
+                )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
         return view
     }
 
     private fun onHandleState(state: CartModel.CartUiState) {
-        binding.buttonConfirm.text = state.total.toString()
     }
 
     private fun initCompose() {

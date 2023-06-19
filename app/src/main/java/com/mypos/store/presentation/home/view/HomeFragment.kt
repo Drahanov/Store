@@ -46,7 +46,6 @@ class HomeFragment : Fragment() {
     }
 
     private fun onHandleState(state: HomeModel.HomeUiState) {
-        Toast.makeText(requireContext(), state.cart.size.toString(), Toast.LENGTH_SHORT).show()
         if (state.isLoading) {
             binding.progressBar.visibility = View.VISIBLE
         } else {

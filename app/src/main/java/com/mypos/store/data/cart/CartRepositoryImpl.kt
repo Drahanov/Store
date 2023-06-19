@@ -32,4 +32,8 @@ class CartRepositoryImpl : CartRepository {
 
         _cartState.value = tempCartState
     }
+
+    override fun clearCart() {
+        _cartState.value = HashMap()
+    }
 }
