@@ -11,7 +11,7 @@ class CartRepositoryImpl : CartRepository {
     private val _cartState = MutableStateFlow(HashMap<Int, Int>())
     override val cartState: StateFlow<HashMap<Int, Int>> = _cartState
 
-    override suspend fun addToCart(id: Int, increase: Boolean) {
+    override fun addToCart(id: Int, increase: Boolean) {
         val tempCartState = HashMap(cartState.value)
         if (tempCartState.containsKey(id)) {
             var amount = tempCartState[id]

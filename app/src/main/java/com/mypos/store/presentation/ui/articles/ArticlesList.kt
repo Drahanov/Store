@@ -19,7 +19,8 @@ import com.mypos.store.domain.articles.model.ArticleEntity
 fun ArticlesList(
     articles: List<ArticleEntity>,
     cartState: HashMap<Int, Int>,
-    cartClickListener: (increase: Boolean, id: Int) -> Unit
+    cartClickListener: (increase: Boolean, id: Int) -> Unit,
+    onClickArticle: (id: Int) -> Unit
 ) {
     if (articles.isEmpty()) {
         Box(
@@ -31,9 +32,16 @@ fun ArticlesList(
         LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
             items(items = articles) { article ->
                 if (cartState.containsKey(article.id)) {
-                    cartState[article.id]?.let { ArticleItem(article, it, cartClickListener) }
+                    cartState[article.id]?.let {
+                        ArticleItem(
+                            article,
+                            it,
+                            cartClickListener,
+                            onClickArticle
+                        )
+                    }
                 } else {
-                    ArticleItem(article, 0, cartClickListener)
+                    ArticleItem(article, 0, cartClickListener, onClickArticle)
                 }
             }
         }

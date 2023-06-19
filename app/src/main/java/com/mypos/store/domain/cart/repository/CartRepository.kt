@@ -4,7 +4,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface CartRepository {
     val cartState: StateFlow<HashMap<Int, Int>>
-    suspend fun addToCart(id: Int, increase: Boolean)
-
+    fun addToCart(id: Int, increase: Boolean)
     fun clearCart()
 }

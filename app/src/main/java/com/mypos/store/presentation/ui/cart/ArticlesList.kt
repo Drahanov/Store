@@ -29,8 +29,8 @@ fun ArticlesList(
     } else {
         LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
             items(items = articles) { article ->
-                if (cartState.containsKey(article.id)) {
-                    cartState[article.id]?.let { ArticleItem(article, it, cartClickListener) }
+                if (cartState.containsKey(article.id) && cartState[article.id] != 0) {
+                    cartState[article.id]?.let { ArticleItem(article, it, cartClickListener, {}) }
                 }
             }
         }

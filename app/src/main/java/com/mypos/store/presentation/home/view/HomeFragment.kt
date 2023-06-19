@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.runtime.collectAsState
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.mypos.store.R
@@ -84,10 +85,16 @@ class HomeFragment : Fragment() {
         binding.articlesList.apply {
             setContent {
                 val state = viewModel.uiState.collectAsState().value
-                ArticlesList(state.articles, state.cart) { increase, id ->
+                ArticlesList(state.articles, state.cart, { increase, id ->
                     viewModel.setEvent(HomeModel.HomeUiEvent.AddToCart(increase, id))
-                }
+                }, onClickArticle = {
+                    val bundle = bundleOf("productId" to it)
 
+                    Navigation.findNavController(binding.root).navigate(
+                        R.id.action_homeFragment_to_detailsFragment, bundle
+                    )
+                }
+                )
             }
         }
     }
