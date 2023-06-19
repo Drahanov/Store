@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -53,6 +54,7 @@ fun ArticleDetailsItem(
     article: ArticleEntity,
     amountInCart: Int,
     cartButtonListener: (increase: Boolean, id: Int) -> Unit,
+    onDeleteClick: (id: ArticleEntity) -> Unit
 ) {
     CompositionLocalProvider(
         LocalMinimumTouchTargetEnforcement provides false
@@ -161,6 +163,11 @@ fun ArticleDetailsItem(
                                 contentDescription = "Cart",
                                 tint = Color.Black
                             )
+                        }
+                        Button(onClick = {
+                            onDeleteClick(article)
+                        }) {
+                            Text(text = "Delete")
                         }
                     }
 

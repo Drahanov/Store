@@ -5,14 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.compose.runtime.collectAsState
 import androidx.fragment.app.viewModels
-import com.mypos.store.R
-import com.mypos.store.databinding.FragmentCartBinding
 import com.mypos.store.databinding.FragmentDetailsBinding
 import com.mypos.store.presentation.base.viewmodel.observeIn
-import com.mypos.store.presentation.cart.viewmodel.CartViewModel
 import com.mypos.store.presentation.details.model.DetailsModel
 import com.mypos.store.presentation.details.viewmodel.DetailsViewModel
 import com.mypos.store.presentation.ui.details.ArticleDetailsItem
@@ -60,6 +56,9 @@ class DetailsFragment : Fragment() {
                                     id
                                 )
                             )
+                        }, onDeleteClick = {
+                            viewModel.setEvent(DetailsModel.DetailsUiEvent.Delete(it))
+                            parentFragmentManager.popBackStack()
                         })
                 }
             }

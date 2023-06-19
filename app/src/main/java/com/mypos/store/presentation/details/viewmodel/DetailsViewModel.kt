@@ -31,13 +31,17 @@ class DetailsViewModel @Inject constructor(
                     cartRepository.cartState.collect {
                         setState { copy(amountInCart = it) }
                     }
-
                 }
             }
 
             is DetailsUiEvent.AddToCart -> {
                 cartRepository.addToCart(event.id, event.shouldIncrease)
             }
+
+            is DetailsUiEvent.Delete -> {
+                articlesRepository.removeArticle(event.article)
+            }
+
 
         }
     }
