@@ -1,5 +1,6 @@
 package com.mypos.store.presentation.ui.buttons
 
+import android.widget.Button
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 
@@ -27,20 +28,7 @@ fun AddNewButton(
     CompositionLocalProvider(
         LocalMinimumTouchTargetEnforcement provides false
     ) {
-        IconButton(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black),
-            onClick = {
-                onClick.invoke()
-            }
-        ) {
-            Icon(
-                imageVector = Icons.Default.ShoppingCart,
-                contentDescription = "Cart",
-                tint = Color.White,
-            )
-        }
+
     }
 
 }

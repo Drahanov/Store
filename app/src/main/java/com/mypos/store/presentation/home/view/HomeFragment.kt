@@ -6,7 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.graphics.Color
 import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
@@ -57,28 +61,34 @@ class HomeFragment : Fragment() {
     private fun initCompose() {
         binding.addNewButton.apply {
             setContent {
-                AddNewButton() {
-                    try {
-                        Navigation.findNavController(binding.root).navigate(
-                            R.id.action_homeFragment_to_addNewFragment
-                        )
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                Button(colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                    onClick = {
+                        try {
+                            Navigation.findNavController(binding.root).navigate(
+                                R.id.action_homeFragment_to_addNewFragment
+                            )
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }) {
+                    Text(text = "Add new")
                 }
             }
         }
 
         binding.cartButton.apply {
             setContent {
-                AddNewButton() {
-                    try {
-                        Navigation.findNavController(binding.root).navigate(
-                            R.id.action_homeFragment_to_cartFragment
-                        )
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    }
+                Button(colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                    onClick = {
+                        try {
+                            Navigation.findNavController(binding.root).navigate(
+                                R.id.action_homeFragment_to_cartFragment
+                            )
+                        } catch (e: Exception) {
+                            e.printStackTrace()
+                        }
+                    }) {
+                    Text(text = "Cart")
                 }
             }
         }

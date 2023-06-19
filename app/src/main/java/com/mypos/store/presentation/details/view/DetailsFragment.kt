@@ -59,6 +59,8 @@ class DetailsFragment : Fragment() {
                         }, onDeleteClick = {
                             viewModel.setEvent(DetailsModel.DetailsUiEvent.Delete(it))
                             parentFragmentManager.popBackStack()
+                        }, onUpdateClick = {
+
                         })
                 }
             }
