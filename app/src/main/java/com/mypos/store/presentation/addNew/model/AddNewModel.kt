@@ -9,8 +9,9 @@ import com.mypos.store.presentation.base.model.UiState
 class AddNewModel {
     data class AddNewUiState(
         val isLoading: Boolean = false,
-        val articles: List<ArticleEntity> = emptyList(),
-        var image: Bitmap? = null
+        var image: Bitmap? = null,
+        val isEditMode: Boolean = false,
+        val article: ArticleEntity? = null
     ) : UiState
 
     sealed class AddNewUiEvent : UiEvent {
@@ -18,10 +19,11 @@ class AddNewModel {
             val title: String,
             val price: Double,
             val shortDescription: String,
-            val fullDescription: String
+            val fullDescription: String,
         ) : AddNewUiEvent()
 
         data class ImageLoaded(var data: Bitmap) : AddNewUiEvent()
+        data class StartEditMode(val id: Int) : AddNewUiEvent()
     }
 
     sealed class AddNewUiSideEffect : UiSideEffect {

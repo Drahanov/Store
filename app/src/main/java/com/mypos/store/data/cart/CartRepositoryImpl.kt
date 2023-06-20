@@ -21,8 +21,13 @@ class CartRepositoryImpl : CartRepository {
                 } else {
                     if (cartState.value[id] != 0) {
                         tempCartState.put(id, amount.minus(1))
+                        if (cartState.value[id] == 0) {
+                            tempCartState.remove(id)
+                        } else {
+                            //do nothing
+                        }
                     } else {
-                        // do nothing when cart is empty for this item
+                        //do nothing
                     }
                 }
             }

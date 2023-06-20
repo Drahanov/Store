@@ -178,7 +178,7 @@ fun ArticleDetailsItem(
                             onClick = {
                                 onUpdateClick(article.id)
                             }) {
-                            Text(text = "Update")
+                            Text(text = "Edit")
                         }
                         Button(colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
                             onClick = {

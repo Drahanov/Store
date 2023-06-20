@@ -8,7 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.collectAsState
+import androidx.core.os.bundleOf
 import androidx.fragment.app.viewModels
+import androidx.navigation.Navigation
+import com.mypos.store.R
 import com.mypos.store.databinding.FragmentDetailsBinding
 import com.mypos.store.presentation.base.viewmodel.observeIn
 import com.mypos.store.presentation.details.model.DetailsModel
@@ -65,7 +68,11 @@ class DetailsFragment : Fragment() {
                             viewModel.setEvent(DetailsModel.DetailsUiEvent.Delete(it))
                             parentFragmentManager.popBackStack()
                         }, onUpdateClick = {
+                            val bundle = bundleOf("productIdEdit" to it)
 
+                            Navigation.findNavController(binding.root).navigate(
+                                R.id.action_detailsFragment_to_addNewFragment, bundle
+                            )
                         }, imagePath = directory.absolutePath
                     )
                 }

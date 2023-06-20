@@ -9,10 +9,10 @@ import java.util.Date
 data class ArticleEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
-    val name: String,
+    var name: String,
     val category: Int,
-    val shortDescription: String,
-    val fullDescription: String,
-    val price: Double,
+    var shortDescription: String,
+    var fullDescription: String,
+    var price: Double,
     val addDate: Date,
 )

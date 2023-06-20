@@ -29,6 +29,7 @@
             android:id="@+id/action_cartFragment_to_confirmationFragment"
             app:destination="@id/confirmationFragment" />
     </fragment>
+
     <dialog
         android:id="@+id/addNewFragment"
         android:name="com.mypos.store.presentation.addNew.view.AddNewFragment"
@@ -38,7 +39,11 @@
         android:id="@+id/detailsFragment"
         android:name="com.mypos.store.presentation.details.view.DetailsFragment"
         android:label="fragment_details"
-        tools:layout="@layout/fragment_details" />
+        tools:layout="@layout/fragment_details" >
+        <action
+            android:id="@+id/action_detailsFragment_to_addNewFragment"
+            app:destination="@id/addNewFragment" />
+    </fragment>
     <dialog
         android:id="@+id/confirmationFragment"
         android:name="com.mypos.store.presentation.confirmation.view.ConfirmationFragment"

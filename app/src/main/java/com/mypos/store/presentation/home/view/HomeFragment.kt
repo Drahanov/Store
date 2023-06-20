@@ -104,6 +104,7 @@ class HomeFragment : Fragment() {
                         } catch (e: Exception) {
                             e.printStackTrace()
                         }
+
                     }) {
                     Icon(Icons.Default.ShoppingCart, contentDescription = "cart icon")
                 }

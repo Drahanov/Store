@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.height
@@ -46,8 +47,21 @@ class AddNewFragment : BottomSheetDialogFragment() {
         savedInstanceState: Bundle?
     ): View {
 
+
+        Toast.makeText(
+            requireContext(),
+            arguments?.getInt("productIdEdit").toString(),
+            Toast.LENGTH_SHORT
+        )
+            .show()
+
         _binding = FragmentAddNewBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        val id = arguments?.getInt("productIdEdit")
+        if (id != null) {
+            viewModel.setEvent(AddNewModel.AddNewUiEvent.StartEditMode(id))
+        }
 
         viewModel.uiState
             .onEach(::onHandleState)
@@ -76,11 +90,13 @@ class AddNewFragment : BottomSheetDialogFragment() {
                             fullDescription = binding.fullDescription.editText?.text.toString()
                         )
                     )
+                    binding.price.editText?.setError(null)
 
                 } catch (e: Exception) {
                     e.printStackTrace()
                     Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT)
                         .show()
+                    binding.price.editText?.setError("Invalid format")
                 }
 
             }
@@ -143,6 +159,15 @@ class AddNewFragment : BottomSheetDialogFragment() {
             binding.progressBar2.visibility = View.VISIBLE
         } else {
             binding.progressBar2.visibility = View.GONE
+        }
+
+        if (state.isEditMode && state.article != null) {
+            binding.title.editText?.setText(state.article.name)
+            binding.price.editText?.setText(
+                state.article.price.toString(),
+            )
+            binding.fullDescription.editText?.setText(state.article.fullDescription)
+            binding.shortDescription.editText?.setText(state.article.shortDescription)
         }
     }
 
