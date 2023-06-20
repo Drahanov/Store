@@ -36,8 +36,8 @@ object DataModule {
 
     @Singleton
     @Provides
-    fun provideLanguagesRepository(dao: ArticlesDao): ArticlesRepository =
-        ArticlesRepositoryImpl(dao)
+    fun provideLanguagesRepository(dao: ArticlesDao, @ApplicationContext context: Context): ArticlesRepository =
+        ArticlesRepositoryImpl(dao, context)
 
     @Singleton
     @Provides

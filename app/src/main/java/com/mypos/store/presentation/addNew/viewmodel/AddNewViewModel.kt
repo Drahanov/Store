@@ -19,18 +19,31 @@ class AddNewViewModel @Inject constructor(
     override suspend fun handleEvent(event: AddNewUiEvent) {
         when (event) {
             is AddNewUiEvent.AddNew -> {
-                val article = ArticleEntity(
-                    name = event.title,
-                    category = 0,
-                    addDate = Date(),
-                    shortDescription = event.shortDescription,
-                    fullDescription = event.fullDescription,
-                    price = event.price,
-                    id = 0,
-                    image = this.uiState.value.image
-                )
-                repository.addArticle(article)
-                setState { copy(image = null) }
+                setState { copy(isLoading = true) }
+
+                viewModelScope.launch {
+                    val article = ArticleEntity(
+                        name = event.title,
+                        category = 0,
+                        addDate = Date(),
+                        shortDescription = event.shortDescription,
+                        fullDescription = event.fullDescription,
+                        price = event.price,
+                        id = 0
+                    )
+                    val id = repository.addArticle(article)
+
+                    if (uiState.value.image != null) {
+                        repository.saveToInternalStorage(
+                            bitmapImage = uiState.value.image!!,
+                            id.toInt()
+                        )
+                    }
+
+                    setState { copy(isLoading = false) }
+                }
+
+
             }
 
             is AddNewUiEvent.ImageLoaded -> {

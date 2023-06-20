@@ -20,7 +20,8 @@ fun ArticlesList(
     articles: List<ArticleEntity>,
     cartState: HashMap<Int, Int>,
     cartClickListener: (increase: Boolean, id: Int) -> Unit,
-    onClickArticle: (id: Int) -> Unit
+    onClickArticle: (id: Int) -> Unit,
+    imagesDirPath: String
 ) {
     if (articles.isEmpty()) {
         Box(
@@ -37,11 +38,12 @@ fun ArticlesList(
                             article,
                             it,
                             cartClickListener,
-                            onClickArticle
+                            onClickArticle,
+                            imagesDirPath
                         )
                     }
                 } else {
-                    ArticleItem(article, 0, cartClickListener, onClickArticle)
+                    ArticleItem(article, 0, cartClickListener, onClickArticle, imagesDirPath)
                 }
             }
         }

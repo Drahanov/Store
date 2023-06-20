@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ArticlesDao {
     @Insert
-    suspend fun addArticle(articleEntity: ArticleEntity)
+    suspend fun addArticle(articleEntity: ArticleEntity): Long
 
     @Delete
     suspend fun removeArticle(articleEntity: ArticleEntity)

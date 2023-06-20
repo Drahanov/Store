@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -38,6 +40,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mypos.store.R
 import com.mypos.store.domain.articles.model.ArticleEntity
+import com.mypos.store.presentation.ui.articles.readImage
+import java.io.FileNotFoundException
 
 
 fun convertImageByteArrayToBitmap(imageData: ByteArray): Bitmap {
@@ -51,7 +55,8 @@ fun ArticleDetailsItem(
     amountInCart: Int,
     cartButtonListener: (increase: Boolean, id: Int) -> Unit,
     onDeleteClick: (article: ArticleEntity) -> Unit,
-    onUpdateClick: (id: Int) -> Unit
+    onUpdateClick: (id: Int) -> Unit,
+    imagePath: String
 ) {
     CompositionLocalProvider(
         LocalMinimumTouchTargetEnforcement provides false
@@ -69,9 +74,15 @@ fun ArticleDetailsItem(
                     .padding(10.dp)
                     .fillMaxSize()
             ) {
-                if (article.image != null) {
+                var image: Bitmap? = null
+                try {
+                    image = readImage(article.id, path = imagePath)
+                } catch (e: FileNotFoundException) {
+                    e.printStackTrace()
+                }
+                if (image == null) {
                     Image(
-                        bitmap = convertImageByteArrayToBitmap(imageData = article.image!!).asImageBitmap(),
+                        painter = painterResource(id = R.drawable.no_image),
                         contentDescription = "image",
                         modifier = Modifier
                             .clip(RoundedCornerShape(10.dp))
@@ -81,7 +92,7 @@ fun ArticleDetailsItem(
                     )
                 } else {
                     Image(
-                        painter = painterResource(id = R.drawable.no_image),
+                        bitmap = image.asImageBitmap(),
                         contentDescription = "image",
                         modifier = Modifier
                             .clip(RoundedCornerShape(10.dp))
@@ -162,9 +173,11 @@ fun ArticleDetailsItem(
                                 tint = Color.Black
                             )
                         }
-                        Button(colors = ButtonDefaults.buttonColors(containerColor = Color.Black), onClick = {
-                            onUpdateClick(article.id)
-                        }) {
+                        Button(
+                            colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                            onClick = {
+                                onUpdateClick(article.id)
+                            }) {
                             Text(text = "Update")
                         }
                         Button(colors = ButtonDefaults.buttonColors(containerColor = Color.Black),

@@ -59,7 +59,8 @@ class AddNewFragment : BottomSheetDialogFragment() {
                             fullDescription = binding.fullDescription.editText?.text.toString()
                         )
                     )
-                    Toast.makeText(requireContext(), "Successfully saved", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Successfully saved", Toast.LENGTH_SHORT)
+                        .show()
 
                     clearFields()
                 } catch (e: Exception) {
@@ -81,6 +82,11 @@ class AddNewFragment : BottomSheetDialogFragment() {
     }
 
     private fun onHandleState(state: AddNewModel.AddNewUiState) {
+        if (state.isLoading) {
+            binding.progressBar2.visibility = View.VISIBLE
+        } else {
+            binding.progressBar2.visibility = View.GONE
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -93,18 +99,10 @@ class AddNewFragment : BottomSheetDialogFragment() {
                 val selectedImage = BitmapFactory.decodeStream(imageStream)
                 val stream = ByteArrayOutputStream()
                 selectedImage.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                val byteArray = stream.toByteArray()
-                val size = byteArray.size
 
-                // if image size bigger than 1mb
-                if (size > 1000000) {
-                    binding.loadImageButton.text = "Image too big"
-                } else {
-                    viewModel.setEvent(AddNewModel.AddNewUiEvent.ImageLoaded(byteArray))
-                    binding.loadImageButton.text = "Image loaded"
-                }
+                binding.imageView.setImageBitmap(selectedImage)
 
-
+                viewModel.setEvent(AddNewModel.AddNewUiEvent.ImageLoaded(selectedImage))
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
                 Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_LONG).show()

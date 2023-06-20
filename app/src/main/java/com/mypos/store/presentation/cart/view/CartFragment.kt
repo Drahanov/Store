@@ -1,5 +1,7 @@
 package com.mypos.store.presentation.cart.view
 
+import android.content.Context
+import android.content.ContextWrapper
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -53,12 +55,19 @@ class CartFragment : Fragment() {
     }
 
     private fun initCompose() {
+        val cw = ContextWrapper(context)
+        val directory = cw.getDir("articlesImages", Context.MODE_APPEND)
+
         binding.articlesList.apply {
             setContent {
                 val state = viewModel.uiState.collectAsState().value
-                ArticlesList(state.articles, state.cart) { increase, id ->
-                    viewModel.setEvent(CartModel.CartUiEvent.AddToCart(increase, id))
-                }
+                ArticlesList(
+                    state.articles,
+                    state.cart,
+                    imagePath = directory.absolutePath,
+                    cartClickListener = { increase, id ->
+                        viewModel.setEvent(CartModel.CartUiEvent.AddToCart(increase, id))
+                    })
 
             }
         }

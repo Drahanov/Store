@@ -1,10 +1,10 @@
 package com.mypos.store.presentation.ui.articles
 
+import android.content.Context
+import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,11 +17,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -30,8 +27,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -41,15 +36,25 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mypos.store.R
 import com.mypos.store.domain.articles.model.ArticleEntity
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileNotFoundException
 
 
 fun convertImageByteArrayToBitmap(imageData: ByteArray): Bitmap {
+
     return BitmapFactory.decodeByteArray(imageData, 0, imageData.size)
+
+}
+
+fun readImage(id: Int, path: String): Bitmap {
+    val f: File = File(path, "$id.jpg")
+    val b = BitmapFactory.decodeStream(FileInputStream(f))
+    return b
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,7 +63,8 @@ fun ArticleItem(
     article: ArticleEntity,
     amountInCart: Int,
     cartButtonListener: (increase: Boolean, id: Int) -> Unit,
-    onClickArticle: (id: Int) -> Unit
+    onClickArticle: (id: Int) -> Unit,
+    imagePath: String
 ) {
     CompositionLocalProvider(
         LocalMinimumTouchTargetEnforcement provides false
@@ -80,17 +86,13 @@ fun ArticleItem(
                     .padding(10.dp)
                     .fillMaxSize()
             ) {
-                if (article.image != null) {
-                    Image(
-                        bitmap = convertImageByteArrayToBitmap(imageData = article.image!!).asImageBitmap(),
-                        contentDescription = "image",
-                        modifier = Modifier
-                            .clip(RoundedCornerShape(10.dp))
-                            .width(100.dp)
-                            .height(100.dp),
-                        contentScale = ContentScale.Crop,
-                    )
-                } else {
+                var image: Bitmap? = null
+                try {
+                    image = readImage(article.id, path = imagePath)
+                } catch (e: FileNotFoundException) {
+                    e.printStackTrace()
+                }
+                if (image == null) {
                     Image(
                         painter = painterResource(id = R.drawable.no_image),
                         contentDescription = "image",
@@ -100,7 +102,18 @@ fun ArticleItem(
                             .height(100.dp),
                         contentScale = ContentScale.Crop,
                     )
+                } else {
+                    Image(
+                        bitmap = image.asImageBitmap(),
+                        contentDescription = "image",
+                        modifier = Modifier
+                            .clip(RoundedCornerShape(10.dp))
+                            .width(100.dp)
+                            .height(100.dp),
+                        contentScale = ContentScale.Crop,
+                    )
                 }
+
                 Row(
                     modifier = Modifier
                         .fillMaxHeight()

@@ -1,5 +1,6 @@
 package com.mypos.store.presentation.addNew.model
 
+import android.graphics.Bitmap
 import com.mypos.store.domain.articles.model.ArticleEntity
 import com.mypos.store.presentation.base.model.UiEvent
 import com.mypos.store.presentation.base.model.UiSideEffect
@@ -9,7 +10,7 @@ class AddNewModel {
     data class AddNewUiState(
         val isLoading: Boolean = false,
         val articles: List<ArticleEntity> = emptyList(),
-        var image: ByteArray? = null
+        var image: Bitmap? = null
     ) : UiState
 
     sealed class AddNewUiEvent : UiEvent {
@@ -20,7 +21,7 @@ class AddNewModel {
             val fullDescription: String
         ) : AddNewUiEvent()
 
-        data class ImageLoaded(var data: ByteArray) : AddNewUiEvent()
+        data class ImageLoaded(var data: Bitmap) : AddNewUiEvent()
     }
 
     class AddNewUiSideEffect : UiSideEffect

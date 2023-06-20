@@ -1,5 +1,7 @@
 package com.mypos.store.presentation.details.view
 
+import android.content.Context
+import android.content.ContextWrapper
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -39,6 +41,9 @@ class DetailsFragment : Fragment() {
     }
 
     private fun initCompose() {
+        val cw = ContextWrapper(context)
+        val directory = cw.getDir("articlesImages", Context.MODE_APPEND)
+
         binding.cardDetails.apply {
             setContent {
                 val state = viewModel.uiState.collectAsState().value
@@ -61,7 +66,8 @@ class DetailsFragment : Fragment() {
                             parentFragmentManager.popBackStack()
                         }, onUpdateClick = {
 
-                        })
+                        }, imagePath = directory.absolutePath
+                    )
                 }
             }
         }
