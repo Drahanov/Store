@@ -24,5 +24,7 @@ class AddNewModel {
         data class ImageLoaded(var data: Bitmap) : AddNewUiEvent()
     }
 
-    class AddNewUiSideEffect : UiSideEffect
+    sealed class AddNewUiSideEffect : UiSideEffect {
+        object Saved : AddNewUiSideEffect()
+    }
 }

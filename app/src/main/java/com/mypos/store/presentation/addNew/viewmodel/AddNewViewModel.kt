@@ -3,6 +3,7 @@ package com.mypos.store.presentation.addNew.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.mypos.store.domain.articles.model.ArticleEntity
 import com.mypos.store.domain.articles.repository.ArticlesRepository
+import com.mypos.store.presentation.addNew.model.AddNewModel
 import com.mypos.store.presentation.addNew.model.AddNewModel.*
 import com.mypos.store.presentation.base.viewmodel.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -41,9 +42,8 @@ class AddNewViewModel @Inject constructor(
                     }
 
                     setState { copy(isLoading = false) }
+                    setEffect(AddNewUiSideEffect.Saved)
                 }
-
-
             }
 
             is AddNewUiEvent.ImageLoaded -> {

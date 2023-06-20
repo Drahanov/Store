@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"
     tools:context=".presentation.addNew.view.AddNewFragment">
 
@@ -16,7 +17,6 @@
         android:layout_marginTop="10dp"
         android:text="Add New"
         android:textColor="@color/black"
-        android:textFontWeight="@integer/material_motion_duration_medium_1"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +31,7 @@
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView">
+        app:layout_constraintTop_toBottomOf="@+id/image">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -97,35 +97,41 @@
         android:id="@+id/confirmButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="5dp"
-        android:backgroundTint="@color/black"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/button_background"
         android:text="Confirm"
         android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/loadImageButton"
         app:layout_constraintTop_toBottomOf="@+id/fullDescription" />
+
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2">
+
+    </androidx.compose.ui.platform.ComposeView>
 
     <Button
         android:id="@+id/loadImageButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="@color/black"
+        android:layout_marginStart="5dp"
+        android:background="@drawable/button_background"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         android:text="Load image"
         android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/confirmButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fullDescription" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_marginTop="10dp"
-        android:src="@drawable/no_image"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toTopOf="@+id/confirmButton" />
 
     <ProgressBar
         android:id="@+id/progressBar2"
@@ -135,6 +141,5 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/fullDescription"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView" />
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
