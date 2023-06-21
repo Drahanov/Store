@@ -46,15 +46,6 @@ class AddNewFragment : BottomSheetDialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-
-        Toast.makeText(
-            requireContext(),
-            arguments?.getInt("productIdEdit").toString(),
-            Toast.LENGTH_SHORT
-        )
-            .show()
-
         _binding = FragmentAddNewBinding.inflate(inflater, container, false)
         val view = binding.root
 

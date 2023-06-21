@@ -19,11 +19,15 @@ class DetailsViewModel @Inject constructor(
     override suspend fun handleEvent(event: DetailsUiEvent) {
         when (event) {
             is DetailsUiEvent.LoadDetails -> {
+
+                setState { copy(isLoading = true) }
                 viewModelScope.launch {
                     event.id?.let {
                         articlesRepository.getArticleById(it).collect {
                             setState { copy(articleEntity = it) }
                         }
+
+                        setState { copy(isLoading = false) }
                     }
                 }
 
@@ -41,8 +45,6 @@ class DetailsViewModel @Inject constructor(
             is DetailsUiEvent.Delete -> {
                 articlesRepository.removeArticle(event.article)
             }
-
-
         }
     }
 }

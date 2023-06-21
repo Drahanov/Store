@@ -81,6 +81,11 @@ class DetailsFragment : Fragment() {
     }
 
     private fun onHandleState(state: DetailsModel.DetailsUiState) {
+        if (state.isLoading) {
+            binding.progressBar3.visibility = View.VISIBLE
+        } else {
+            binding.progressBar3.visibility = View.GONE
+        }
     }
 
     override fun onDestroy() {
