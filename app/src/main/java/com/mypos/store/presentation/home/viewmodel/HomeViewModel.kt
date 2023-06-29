@@ -6,7 +6,6 @@ import com.mypos.store.domain.cart.repository.CartRepository
 import com.mypos.store.presentation.base.viewmodel.BaseViewModel
 import com.mypos.store.presentation.home.model.HomeModel.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,7 +22,7 @@ class HomeViewModel @Inject constructor(
             HomeUiEvent.LoadArticles -> {
                 setState { copy(isLoading = true) }
                 viewModelScope.launch {
-                    articlesRepository.readAllArticles().collect() {
+                    articlesRepository.readAllArticlesFlow().collect() {
                         setState { copy(isLoading = false, articles = it) }
                     }
                 }

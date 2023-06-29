@@ -20,9 +20,12 @@ interface ArticlesDao {
     suspend fun updateArticle(articleEntity: ArticleEntity)
 
     @Query("SELECT * FROM articles_table ORDER BY id ASC")
-    fun readAllArticles(): Flow<List<ArticleEntity>>
+    fun readAllArticlesFlow(): Flow<List<ArticleEntity>>
 
     @Query("SELECT * FROM articles_table WHERE id=:id")
-    fun getArticleById(id: Int): Flow<ArticleEntity>
+    fun getArticleByIdFlow(id: Int): Flow<ArticleEntity>
+
+    @Query("SELECT * FROM articles_table ORDER BY id ASC")
+    fun readAllArticles(): List<ArticleEntity>
 
 }

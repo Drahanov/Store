@@ -18,7 +18,7 @@ class CartViewModel @Inject constructor(
 ) {
     init {
         viewModelScope.launch {
-            articlesRepository.readAllArticles().collect {
+            articlesRepository.readAllArticlesFlow().collect {
                 setState { copy(articles = it) }
 
             }

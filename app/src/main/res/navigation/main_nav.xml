@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_nav"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/refactoredHomeFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -49,5 +49,17 @@
         android:name="com.mypos.store.presentation.confirmation.view.ConfirmationFragment"
         android:label="fragment_confirmation"
         tools:layout="@layout/fragment_confirmation" />
+    <fragment
+        android:id="@+id/refactoredHomeFragment"
+        android:name="com.mypos.store.presentation.refactor.view.RefactoredHomeFragment"
+        android:label="fragment_refactored_home"
+        tools:layout="@layout/fragment_refactored_home" >
+        <action
+            android:id="@+id/action_refactoredHomeFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
+        <action
+            android:id="@+id/action_refactoredHomeFragment_to_addNewFragment"
+            app:destination="@id/addNewFragment" />
+    </fragment>
 
 </navigation>

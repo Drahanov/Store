@@ -3,26 +3,49 @@ package com.mypos.store.data.articles.repository
 import android.content.Context
 import android.content.ContextWrapper
 import android.graphics.Bitmap
+import android.os.Handler
 import com.mypos.store.data.articles.dao.ArticlesDao
 import com.mypos.store.domain.articles.model.ArticleEntity
 import com.mypos.store.domain.articles.repository.ArticlesRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.util.concurrent.ThreadPoolExecutor
 import javax.inject.Inject
-
+import com.mypos.store.domain.util.result.Result
 
 class ArticlesRepositoryImpl @Inject constructor(
     private val articlesDao: ArticlesDao,
-    private val context: Context
+    private val context: Context,
+    private val executor: ThreadPoolExecutor,
+    private val handler: Handler
 ) :
     ArticlesRepository {
 
-    override suspend fun readAllArticles(): Flow<List<ArticleEntity>> {
-        return articlesDao.readAllArticles()
+    interface RepositoryCallback<T> {
+        fun onComplete(result: Result<T>?)
+    }
+
+    override fun readAllArticles(callback: RepositoryCallback<List<ArticleEntity>>) {
+        executor.execute(Runnable() {
+            run {
+                try {
+                    handler.post(Runnable {
+                        val result = articlesDao.readAllArticles()
+                        callback.onComplete(Result.Success(result));
+                    })
+                } catch (e: Exception) {
+                    callback.onComplete(Result.Error(e));
+                    e.printStackTrace()
+                }
+            }
+        })
+        articlesDao.readAllArticles()
+    }
+
+    override suspend fun readAllArticlesFlow(): Flow<List<ArticleEntity>> {
+        return articlesDao.readAllArticlesFlow()
     }
 
     override suspend fun addArticle(articleEntity: ArticleEntity): Long {
@@ -38,7 +61,7 @@ class ArticlesRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getArticleById(id: Int): Flow<ArticleEntity> {
-        return articlesDao.getArticleById(id)
+        return articlesDao.getArticleByIdFlow(id)
     }
 
     override fun saveToInternalStorage(bitmapImage: Bitmap, id: Int): String? {
@@ -60,16 +83,5 @@ class ArticlesRepositoryImpl @Inject constructor(
         }
         return directory.absolutePath
     }
-
-//    private fun loadImageFromStorage(path: String) {
-//        try {
-//            val f = File(path, "profile.jpg")
-//            val b = BitmapFactory.decodeStream(FileInputStream(f))
-//            val img = findViewById(R.id.imgPicker) as ImageView
-//            img.setImageBitmap(b)
-//        } catch (e: FileNotFoundException) {
-//            e.printStackTrace()
-//        }
-//    }
 
 }

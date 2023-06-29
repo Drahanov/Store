@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.mypos.store.R
@@ -28,6 +29,7 @@ import com.mypos.store.databinding.FragmentAddNewBinding
 import com.mypos.store.presentation.addNew.model.AddNewModel
 import com.mypos.store.presentation.addNew.viewmodel.AddNewViewModel
 import com.mypos.store.presentation.base.viewmodel.observeIn
+import com.mypos.store.presentation.refactor.viewmodel.RefactoredHomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import java.io.ByteArrayOutputStream
@@ -39,6 +41,8 @@ import java.io.InputStream
 class AddNewFragment : BottomSheetDialogFragment() {
 
     private val viewModel: AddNewViewModel by viewModels()
+    private val sharedViewModel: RefactoredHomeViewModel by activityViewModels()
+
     private var _binding: FragmentAddNewBinding? = null
     private val binding get() = _binding!!
 
