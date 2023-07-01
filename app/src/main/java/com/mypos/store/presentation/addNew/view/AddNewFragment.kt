@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.height
@@ -146,6 +145,15 @@ class AddNewFragment : BottomSheetDialogFragment() {
             AddNewModel.AddNewUiSideEffect.Saved -> {
                 saved()
             }
+
+            is AddNewModel.AddNewUiSideEffect.NotifyHomeNew -> {
+                sharedViewModel.addNewArticle(effect.article)
+            }
+
+            is AddNewModel.AddNewUiSideEffect.NotifyHomeUpdate -> {
+                sharedViewModel.updateArticle(effect.article)
+            }
+
         }
     }
 

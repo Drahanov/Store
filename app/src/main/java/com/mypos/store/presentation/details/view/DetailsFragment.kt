@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.runtime.collectAsState
 import androidx.core.os.bundleOf
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.mypos.store.R
@@ -16,6 +17,8 @@ import com.mypos.store.databinding.FragmentDetailsBinding
 import com.mypos.store.presentation.base.viewmodel.observeIn
 import com.mypos.store.presentation.details.model.DetailsModel
 import com.mypos.store.presentation.details.viewmodel.DetailsViewModel
+import com.mypos.store.presentation.home.viewmodel.HomeViewModel
+import com.mypos.store.presentation.refactor.viewmodel.RefactoredHomeViewModel
 import com.mypos.store.presentation.ui.details.ArticleDetailsItem
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
@@ -24,6 +27,8 @@ import kotlinx.coroutines.flow.onEach
 class DetailsFragment : Fragment() {
 
     private val viewModel: DetailsViewModel by viewModels()
+    private val sharedViewModel: RefactoredHomeViewModel by activityViewModels()
+
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
 
@@ -37,6 +42,11 @@ class DetailsFragment : Fragment() {
         viewModel.uiState
             .onEach(::onHandleState)
             .observeIn(this)
+
+        viewModel.sideEffect
+            .onEach(::onHandleEffect)
+            .observeIn(this)
+
 
         initCompose()
         viewModel.setEvent(DetailsModel.DetailsUiEvent.LoadDetails(arguments?.getInt("productId")))
@@ -85,6 +95,14 @@ class DetailsFragment : Fragment() {
             binding.progressBar3.visibility = View.VISIBLE
         } else {
             binding.progressBar3.visibility = View.GONE
+        }
+    }
+
+    private fun onHandleEffect(effect: DetailsModel.DetailsEffect) {
+        when (effect) {
+            is DetailsModel.DetailsEffect.NotifyDeleteItem -> {
+                sharedViewModel.deleteArticle(effect.article)
+            }
         }
     }
 

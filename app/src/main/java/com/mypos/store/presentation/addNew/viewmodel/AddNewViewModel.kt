@@ -7,13 +7,11 @@ import android.graphics.Bitmap
 import androidx.lifecycle.viewModelScope
 import com.mypos.store.domain.articles.model.ArticleEntity
 import com.mypos.store.domain.articles.repository.ArticlesRepository
-import com.mypos.store.presentation.addNew.model.AddNewModel
 import com.mypos.store.presentation.addNew.model.AddNewModel.*
 import com.mypos.store.presentation.base.viewmodel.BaseViewModel
 import com.mypos.store.presentation.ui.articles.readImage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.io.FileNotFoundException
 import java.util.Date
@@ -51,7 +49,8 @@ class AddNewViewModel @Inject constructor(
                         setState { copy(isLoading = false, image = null) }
                         setEffect(AddNewUiSideEffect.Saved)
 
-
+                        if (article != null)
+                            setEffect(AddNewUiSideEffect.NotifyHomeNew(article))
                     }
                 } else {
                     viewModelScope.launch {
@@ -73,8 +72,10 @@ class AddNewViewModel @Inject constructor(
                             )
                         }
 
+
                         setState { copy(isLoading = false, image = null) }
                         setEffect(AddNewUiSideEffect.Saved)
+                        setEffect(AddNewUiSideEffect.NotifyHomeNew(article.copy(id = id.toInt())))
 
                     }
                 }

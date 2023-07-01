@@ -2,6 +2,7 @@ package com.mypos.store.domain.articles.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import java.util.Date
 
@@ -15,4 +16,7 @@ data class ArticleEntity(
     var fullDescription: String,
     var price: Double,
     val addDate: Date,
-)
+) {
+    @Ignore
+    var amountInCart: Int = 0
+}

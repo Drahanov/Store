@@ -28,5 +28,7 @@ class AddNewModel {
 
     sealed class AddNewUiSideEffect : UiSideEffect {
         object Saved : AddNewUiSideEffect()
+        data class NotifyHomeNew(val article: ArticleEntity) : AddNewUiSideEffect();
+        data class NotifyHomeUpdate(val article: ArticleEntity) : AddNewUiSideEffect();
     }
 }

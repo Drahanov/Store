@@ -1,10 +1,13 @@
 package com.mypos.store.presentation.refactor.view;
 
+import static androidx.core.os.BundleKt.bundleOf;
+
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -21,8 +24,11 @@ import com.mypos.store.domain.util.result.Result;
 import com.mypos.store.domain.articles.model.ArticleEntity;
 import com.mypos.store.domain.articles.repository.ArticlesRepository;
 import com.mypos.store.presentation.refactor.model.HomeEventsCallback;
+import com.mypos.store.presentation.refactor.view.adapter.ArticlesAdapter;
+import com.mypos.store.presentation.refactor.view.adapter.ClickListener;
 import com.mypos.store.presentation.refactor.viewmodel.RefactoredHomeViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -39,6 +45,7 @@ public class RefactoredHomeFragment extends Fragment implements View.OnClickList
     private TextView textViewNoProducts;
     private ImageView imageViewNoProducts;
     private ProgressBar progressBar;
+    private ArticlesAdapter adapter;
 
     RefactoredHomeViewModel viewModel;
 
@@ -56,6 +63,7 @@ public class RefactoredHomeFragment extends Fragment implements View.OnClickList
         viewModel = new ViewModelProvider(requireActivity()).get(RefactoredHomeViewModel.class);
         viewModel.init(this);
 
+        progressBar.setVisibility(View.VISIBLE);
         viewModel.readArticles();
         return view;
     }
@@ -63,7 +71,7 @@ public class RefactoredHomeFragment extends Fragment implements View.OnClickList
 
     private void init() {
         buttonCart = view.findViewById(R.id.cartButton);
-        recyclerView = view.findViewById(R.id.articlesList);
+        recyclerView = view.findViewById(R.id.rvArticles);
         buttonAddNew = view.findViewById(R.id.addNewButton);
         textViewNoProducts = view.findViewById(R.id.textViewNoProducts);
         imageViewNoProducts = view.findViewById(R.id.imageViewNoProducts);
@@ -71,6 +79,19 @@ public class RefactoredHomeFragment extends Fragment implements View.OnClickList
 
         buttonCart.setOnClickListener(this);
         buttonAddNew.setOnClickListener(this);
+
+        adapter = new ArticlesAdapter(new ArrayList<ArticleEntity>(), new ClickListener() {
+            @Override
+            public void onArticleClick(ArticleEntity article) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("productId", article.getId());
+                Navigation.findNavController(view).navigate(
+                        R.id.action_refactoredHomeFragment_to_detailsFragment, bundle
+                );
+            }
+        });
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
     }
 
     @Override
@@ -97,23 +118,31 @@ public class RefactoredHomeFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onFetched(Result result) {
+        progressBar.setVisibility(View.GONE);
+
         if (result instanceof Result.Success) {
-            for (ArticleEntity article : ((Result.Success<List<ArticleEntity>>) result).data) {
-                Toast.makeText(requireContext(), article.getName(), Toast.LENGTH_SHORT).show();
-            }
+            adapter.addMultipleItems(((Result.Success<List<ArticleEntity>>) result).data);
         } else {
             Toast.makeText(requireContext(), "Oops, something went wrong", Toast.LENGTH_SHORT).show();
         }
     }
 
     @Override
-    public void onArticleAdded() {
-        Toast.makeText(requireContext(), "Added", Toast.LENGTH_LONG).show();
+    public void onArticleAdded(ArticleEntity article) {
+        if (adapter != null) {
+            adapter.addNewItem(article);
+        }
     }
 
     @Override
-    public void onArticleDeleted() {
-        Toast.makeText(requireContext(), "Deleted", Toast.LENGTH_LONG).show();
+    public void onArticleDeleted(ArticleEntity article) {
+        adapter.deleteItem(article);
+    }
+
+    @Override
+    public void onArticleUpdated(ArticleEntity article) {
+
+        adapter.updateItem(article);
     }
 
     @Override

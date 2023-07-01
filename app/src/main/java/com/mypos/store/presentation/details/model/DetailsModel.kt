@@ -4,6 +4,7 @@ import com.mypos.store.domain.articles.model.ArticleEntity
 import com.mypos.store.presentation.base.model.UiEvent
 import com.mypos.store.presentation.base.model.UiSideEffect
 import com.mypos.store.presentation.base.model.UiState
+import com.mypos.store.presentation.details.view.DetailsFragment
 
 class DetailsModel {
     data class DetailsUiState(
@@ -18,5 +19,7 @@ class DetailsModel {
         data class Delete(val article: ArticleEntity) : DetailsUiEvent()
     }
 
-    class DetailsEffect : UiSideEffect
+    sealed class DetailsEffect : UiSideEffect {
+        data class NotifyDeleteItem(val article: ArticleEntity) : DetailsEffect()
+    }
 }

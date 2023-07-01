@@ -44,6 +44,7 @@ class DetailsViewModel @Inject constructor(
 
             is DetailsUiEvent.Delete -> {
                 articlesRepository.removeArticle(event.article)
+                setEffect(DetailsEffect.NotifyDeleteItem(event.article))
             }
         }
     }

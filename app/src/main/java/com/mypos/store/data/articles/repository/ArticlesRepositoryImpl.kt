@@ -36,8 +36,10 @@ class ArticlesRepositoryImpl @Inject constructor(
                         callback.onComplete(Result.Success(result));
                     })
                 } catch (e: Exception) {
-                    callback.onComplete(Result.Error(e));
-                    e.printStackTrace()
+                    handler.post(Runnable {
+                        callback.onComplete(Result.Error(e));
+                        e.printStackTrace()
+                    })
                 }
             }
         })

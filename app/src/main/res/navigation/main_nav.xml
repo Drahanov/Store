@@ -60,6 +60,9 @@
         <action
             android:id="@+id/action_refactoredHomeFragment_to_addNewFragment"
             app:destination="@id/addNewFragment" />
+        <action
+            android:id="@+id/action_refactoredHomeFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
     </fragment>
 
 </navigation>

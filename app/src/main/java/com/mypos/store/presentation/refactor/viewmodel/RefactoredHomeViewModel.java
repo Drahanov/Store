@@ -44,17 +44,25 @@ public class RefactoredHomeViewModel extends ViewModel {
         });
     }
 
-    public void addNewArticle() {
+    public void addNewArticle(ArticleEntity article) {
         try {
-            callback.onArticleAdded();
+            callback.onArticleAdded(article);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
     }
 
-    public void deleteArticle() {
+    public void deleteArticle(ArticleEntity article) {
         try {
-            callback.onArticleDeleted();
+            callback.onArticleDeleted(article);
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateArticle(ArticleEntity article) {
+        try {
+            callback.onArticleUpdated(article);
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
