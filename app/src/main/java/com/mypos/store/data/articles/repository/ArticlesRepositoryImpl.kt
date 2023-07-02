@@ -29,6 +29,7 @@ class ArticlesRepositoryImpl @Inject constructor(
 
     override fun readAllArticles(callback: RepositoryCallback<List<ArticleEntity>>) {
         executor.execute(Runnable() {
+
             run {
                 try {
                     handler.post(Runnable {

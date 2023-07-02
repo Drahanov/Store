@@ -1,5 +1,7 @@
 package com.mypos.store.presentation.refactor.view.adapter;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,13 +13,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mypos.store.R;
 import com.mypos.store.domain.articles.model.ArticleEntity;
 
-import java.util.HashMap;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHolder> {
 
     private final List<ArticleEntity> articles;
     private final ClickListener clickListener;
+    private final String imagesPath;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView name;
@@ -76,9 +81,10 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
 
     }
 
-    public ArticlesAdapter(List<ArticleEntity> articles, ClickListener clickListener) {
+    public ArticlesAdapter(List<ArticleEntity> articles, ClickListener clickListener, String imagesPath) {
         this.articles = articles;
         this.clickListener = clickListener;
+        this.imagesPath = imagesPath;
     }
 
     @Override
@@ -119,6 +125,11 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
                 clickListener.onCartActionClick(article, false);
             }
         });
+
+        Bitmap image = readImage(article.getId(), imagesPath);
+        if (image != null) {
+            viewHolder.getImage().setImageBitmap(image);
+        }
     }
 
     @Override
@@ -147,5 +158,14 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
         int lastIndex = articles.size() - 1;
         this.articles.addAll(articles);
         notifyItemRangeInserted(lastIndex, articles.size());
+    }
+
+    public Bitmap readImage(int id, String path) {
+        File f = new File(path, id + ".jpg");
+        try {
+            return BitmapFactory.decodeStream(new FileInputStream(f));
+        } catch (FileNotFoundException e) {
+            return null;
+        }
     }
 }

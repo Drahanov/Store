@@ -2,6 +2,8 @@ package com.mypos.store.presentation.refactor.view;
 
 import static androidx.core.os.BundleKt.bundleOf;
 
+import android.content.Context;
+import android.content.ContextWrapper;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -10,6 +12,7 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +23,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mypos.store.R;
-import com.mypos.store.domain.util.result.Result;
 import com.mypos.store.domain.articles.model.ArticleEntity;
 import com.mypos.store.domain.articles.repository.ArticlesRepository;
 import com.mypos.store.presentation.refactor.model.HomeEventsCallback;
@@ -28,6 +30,7 @@ import com.mypos.store.presentation.refactor.view.adapter.ArticlesAdapter;
 import com.mypos.store.presentation.refactor.view.adapter.ClickListener;
 import com.mypos.store.presentation.refactor.viewmodel.RefactoredHomeViewModel;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,21 +53,15 @@ public class RefactoredHomeFragment extends Fragment implements View.OnClickList
 
     private RefactoredHomeViewModel viewModel;
 
-    @Inject
-    ArticlesRepository articlesRepository;
-
-    @Inject
-    ThreadPoolExecutor threadPoolExecutor;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_refactored_home, container, false);
         init();
         viewModel = new ViewModelProvider(requireActivity()).get(RefactoredHomeViewModel.class);
+        progressBar.setVisibility(View.VISIBLE);
         viewModel.init(this);
 
-        progressBar.setVisibility(View.VISIBLE);
         viewModel.readArticles();
         return view;
     }
@@ -81,6 +78,9 @@ public class RefactoredHomeFragment extends Fragment implements View.OnClickList
         buttonCart.setOnClickListener(this);
         buttonAddNew.setOnClickListener(this);
 
+        ContextWrapper cw = new ContextWrapper(requireContext());
+        File directory = cw.getDir("articlesImages", Context.MODE_APPEND);
+
         adapter = new ArticlesAdapter(new ArrayList<ArticleEntity>(), new ClickListener() {
             @Override
             public void onArticleClick(int articleId) {
@@ -92,7 +92,7 @@ public class RefactoredHomeFragment extends Fragment implements View.OnClickList
                 viewModel.cartAction(article, isIncreased);
                 onArticleUpdated(article);
             }
-        });
+        }, directory.getAbsolutePath());
 
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -122,17 +122,31 @@ public class RefactoredHomeFragment extends Fragment implements View.OnClickList
     @Override
     public void onFetched(List<ArticleEntity> articles) {
         progressBar.setVisibility(View.GONE);
+        if (articles.isEmpty()) {
+            textViewNoProducts.setVisibility(View.VISIBLE);
+            imageViewNoProducts.setVisibility(View.VISIBLE);
+        }
         adapter.addMultipleItems(articles);
     }
 
     @Override
     public void onArticleAdded(ArticleEntity article) {
         adapter.addNewItem(article);
+
+        if (adapter.getItemCount() == 1) {
+            textViewNoProducts.setVisibility(View.GONE);
+            imageViewNoProducts.setVisibility(View.GONE);
+        }
     }
 
     @Override
     public void onArticleDeleted(ArticleEntity article) {
         adapter.deleteItem(article);
+
+        if (adapter.getItemCount() < 1) {
+            textViewNoProducts.setVisibility(View.VISIBLE);
+            imageViewNoProducts.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

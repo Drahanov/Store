@@ -44,9 +44,7 @@ import java.io.FileNotFoundException
 
 
 fun convertImageByteArrayToBitmap(imageData: ByteArray): Bitmap {
-
     return BitmapFactory.decodeByteArray(imageData, 0, imageData.size)
-
 }
 
 fun readImage(id: Int, path: String): Bitmap {
