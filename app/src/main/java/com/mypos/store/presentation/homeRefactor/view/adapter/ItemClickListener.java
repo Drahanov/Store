@@ -1,8 +1,8 @@
-package com.mypos.store.presentation.refactor.view.adapter;
+package com.mypos.store.presentation.homeRefactor.view.adapter;
 
 import com.mypos.store.domain.articles.model.ArticleEntity;
 
-public interface ClickListener {
+public interface ItemClickListener {
     void onArticleClick(int articleId);
     void onCartActionClick(ArticleEntity article, boolean isIncreased);
 }

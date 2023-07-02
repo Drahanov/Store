@@ -1,4 +1,4 @@
-package com.mypos.store.presentation.refactor.viewmodel;
+package com.mypos.store.presentation.homeRefactor.viewmodel;
 
 import androidx.lifecycle.ViewModel;
 
@@ -6,7 +6,7 @@ import com.mypos.store.data.articles.repository.ArticlesRepositoryImpl;
 import com.mypos.store.domain.articles.model.ArticleEntity;
 import com.mypos.store.domain.articles.repository.ArticlesRepository;
 import com.mypos.store.domain.util.result.Result;
-import com.mypos.store.presentation.refactor.model.HomeEventsCallback;
+import com.mypos.store.presentation.homeRefactor.model.HomeEventsCallback;
 
 import java.util.List;
 
@@ -16,13 +16,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 
 
 @HiltViewModel
-public class RefactoredHomeViewModel extends ViewModel {
+public class HomeViewModel extends ViewModel {
 
     private final ArticlesRepository articlesRepository;
     private HomeEventsCallback callback;
 
     @Inject
-    public RefactoredHomeViewModel(ArticlesRepository repository) {
+    public HomeViewModel(ArticlesRepository repository) {
         this.articlesRepository = repository;
     }
 

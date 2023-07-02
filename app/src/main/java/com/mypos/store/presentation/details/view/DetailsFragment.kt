@@ -17,7 +17,7 @@ import com.mypos.store.databinding.FragmentDetailsBinding
 import com.mypos.store.presentation.base.viewmodel.observeIn
 import com.mypos.store.presentation.details.model.DetailsModel
 import com.mypos.store.presentation.details.viewmodel.DetailsViewModel
-import com.mypos.store.presentation.refactor.viewmodel.RefactoredHomeViewModel
+import com.mypos.store.presentation.homeRefactor.viewmodel.HomeViewModel
 import com.mypos.store.presentation.ui.details.ArticleDetailsItem
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
@@ -26,7 +26,7 @@ import kotlinx.coroutines.flow.onEach
 class DetailsFragment : Fragment() {
 
     private val viewModel: DetailsViewModel by viewModels()
-    private val sharedViewModel: RefactoredHomeViewModel by activityViewModels()
+    private val sharedViewModel: HomeViewModel by activityViewModels()
 
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!

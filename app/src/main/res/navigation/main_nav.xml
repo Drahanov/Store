@@ -36,9 +36,9 @@
         tools:layout="@layout/fragment_confirmation" />
     <fragment
         android:id="@+id/refactoredHomeFragment"
-        android:name="com.mypos.store.presentation.refactor.view.RefactoredHomeFragment"
+        android:name="com.mypos.store.presentation.homeRefactor.view.HomeFragment"
         android:label="fragment_refactored_home"
-        tools:layout="@layout/fragment_refactored_home" >
+        tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_refactoredHomeFragment_to_cartFragment"
             app:destination="@id/cartFragment" />

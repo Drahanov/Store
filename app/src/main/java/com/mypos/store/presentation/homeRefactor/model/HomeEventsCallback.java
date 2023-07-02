@@ -1,7 +1,6 @@
-package com.mypos.store.presentation.refactor.model;
+package com.mypos.store.presentation.homeRefactor.model;
 
 import com.mypos.store.domain.articles.model.ArticleEntity;
-import com.mypos.store.domain.util.result.Result;
 
 import java.util.List;
 

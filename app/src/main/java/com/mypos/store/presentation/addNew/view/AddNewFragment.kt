@@ -28,7 +28,7 @@ import com.mypos.store.databinding.FragmentAddNewBinding
 import com.mypos.store.presentation.addNew.model.AddNewModel
 import com.mypos.store.presentation.addNew.viewmodel.AddNewViewModel
 import com.mypos.store.presentation.base.viewmodel.observeIn
-import com.mypos.store.presentation.refactor.viewmodel.RefactoredHomeViewModel
+import com.mypos.store.presentation.homeRefactor.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 import java.io.ByteArrayOutputStream
@@ -40,7 +40,7 @@ import java.io.InputStream
 class AddNewFragment : BottomSheetDialogFragment() {
 
     private val viewModel: AddNewViewModel by viewModels()
-    private val sharedViewModel: RefactoredHomeViewModel by activityViewModels()
+    private val sharedViewModel: HomeViewModel by activityViewModels()
 
     private var _binding: FragmentAddNewBinding? = null
     private val binding get() = _binding!!

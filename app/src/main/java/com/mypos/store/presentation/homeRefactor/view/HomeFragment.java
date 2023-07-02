@@ -1,4 +1,4 @@
-package com.mypos.store.presentation.refactor.view;
+package com.mypos.store.presentation.homeRefactor.view;
 
 import static androidx.core.os.BundleKt.bundleOf;
 
@@ -12,7 +12,6 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.ContactsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,24 +23,19 @@ import android.widget.Toast;
 
 import com.mypos.store.R;
 import com.mypos.store.domain.articles.model.ArticleEntity;
-import com.mypos.store.domain.articles.repository.ArticlesRepository;
-import com.mypos.store.presentation.refactor.model.HomeEventsCallback;
-import com.mypos.store.presentation.refactor.view.adapter.ArticlesAdapter;
-import com.mypos.store.presentation.refactor.view.adapter.ClickListener;
-import com.mypos.store.presentation.refactor.viewmodel.RefactoredHomeViewModel;
+import com.mypos.store.presentation.homeRefactor.model.HomeEventsCallback;
+import com.mypos.store.presentation.homeRefactor.view.adapter.ArticlesAdapter;
+import com.mypos.store.presentation.homeRefactor.view.adapter.ItemClickListener;
+import com.mypos.store.presentation.homeRefactor.viewmodel.HomeViewModel;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ThreadPoolExecutor;
-
-import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
-public class RefactoredHomeFragment extends Fragment implements View.OnClickListener, HomeEventsCallback {
+public class HomeFragment extends Fragment implements View.OnClickListener, HomeEventsCallback {
 
     private View view;
     private RecyclerView recyclerView;
@@ -51,14 +45,14 @@ public class RefactoredHomeFragment extends Fragment implements View.OnClickList
     private ProgressBar progressBar;
     private ArticlesAdapter adapter;
 
-    private RefactoredHomeViewModel viewModel;
+    private HomeViewModel viewModel;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_refactored_home, container, false);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
         init();
-        viewModel = new ViewModelProvider(requireActivity()).get(RefactoredHomeViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         progressBar.setVisibility(View.VISIBLE);
         viewModel.init(this);
 
@@ -81,7 +75,7 @@ public class RefactoredHomeFragment extends Fragment implements View.OnClickList
         ContextWrapper cw = new ContextWrapper(requireContext());
         File directory = cw.getDir("articlesImages", Context.MODE_APPEND);
 
-        adapter = new ArticlesAdapter(new ArrayList<ArticleEntity>(), new ClickListener() {
+        adapter = new ArticlesAdapter(new ArrayList<ArticleEntity>(), new ItemClickListener() {
             @Override
             public void onArticleClick(int articleId) {
                 openDetails(articleId);

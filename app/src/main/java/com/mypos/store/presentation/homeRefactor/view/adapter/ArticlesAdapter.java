@@ -1,4 +1,4 @@
-package com.mypos.store.presentation.refactor.view.adapter;
+package com.mypos.store.presentation.homeRefactor.view.adapter;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,7 +21,7 @@ import java.util.List;
 public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHolder> {
 
     private final List<ArticleEntity> articles;
-    private final ClickListener clickListener;
+    private final ItemClickListener clickListener;
     private final String imagesPath;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -81,7 +81,7 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
 
     }
 
-    public ArticlesAdapter(List<ArticleEntity> articles, ClickListener clickListener, String imagesPath) {
+    public ArticlesAdapter(List<ArticleEntity> articles, ItemClickListener clickListener, String imagesPath) {
         this.articles = articles;
         this.clickListener = clickListener;
         this.imagesPath = imagesPath;
