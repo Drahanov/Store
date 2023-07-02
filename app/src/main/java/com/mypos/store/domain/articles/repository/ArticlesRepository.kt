@@ -6,12 +6,13 @@ import com.mypos.store.domain.articles.model.ArticleEntity
 import kotlinx.coroutines.flow.Flow
 
 interface ArticlesRepository {
-    suspend fun readAllArticlesFlow(): Flow<List<ArticleEntity>>
-    suspend fun addArticle(articleEntity: ArticleEntity): Long
-    suspend fun removeArticle(articleEntity: ArticleEntity)
-    suspend fun updateArticle(articleEntity: ArticleEntity)
-    suspend fun getArticleById(id: Int): Flow<ArticleEntity>
+    suspend fun readAllArticlesSuspend(): Flow<List<ArticleEntity>>
+    suspend fun addArticleSuspend(articleEntity: ArticleEntity): Long
+    suspend fun removeArticleSuspend(articleEntity: ArticleEntity)
+    suspend fun updateArticleSuspend(articleEntity: ArticleEntity)
+    suspend fun getArticleByIdSuspend(id: Int): Flow<ArticleEntity>
 
     fun saveToInternalStorage(bitmapImage: Bitmap, id: Int): String?
     fun readAllArticles(callback: ArticlesRepositoryImpl.RepositoryCallback<List<ArticleEntity>>)
+    fun updateArticle(articleEntity: ArticleEntity)
 }

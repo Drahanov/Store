@@ -16,7 +16,21 @@ data class ArticleEntity(
     var fullDescription: String,
     var price: Double,
     val addDate: Date,
-) {
-    @Ignore
     var amountInCart: Int = 0
+) {
+
+    public fun cartAction(isIncreased: Boolean): Int {
+        if (isIncreased) {
+            amountInCart += 1
+        } else {
+            if (amountInCart != 0) {
+                amountInCart -= 1
+            }
+        }
+        return amountInCart
+    }
+
+    public fun removeFromCart() {
+        amountInCart = 0
+    }
 }

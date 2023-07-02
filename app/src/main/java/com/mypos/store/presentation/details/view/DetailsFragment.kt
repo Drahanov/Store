@@ -17,7 +17,6 @@ import com.mypos.store.databinding.FragmentDetailsBinding
 import com.mypos.store.presentation.base.viewmodel.observeIn
 import com.mypos.store.presentation.details.model.DetailsModel
 import com.mypos.store.presentation.details.viewmodel.DetailsViewModel
-import com.mypos.store.presentation.home.viewmodel.HomeViewModel
 import com.mypos.store.presentation.refactor.viewmodel.RefactoredHomeViewModel
 import com.mypos.store.presentation.ui.details.ArticleDetailsItem
 import dagger.hilt.android.AndroidEntryPoint
@@ -61,12 +60,9 @@ class DetailsFragment : Fragment() {
             setContent {
                 val state = viewModel.uiState.collectAsState().value
 
-                var amountInCart: Int? = 0
-                amountInCart = state.amountInCart[state.articleEntity?.id]
                 state.articleEntity?.let {
                     ArticleDetailsItem(
                         article = it,
-                        amountInCart = amountInCart ?: 0,
                         cartButtonListener = { shouldIncrease, id ->
                             viewModel.setEvent(
                                 DetailsModel.DetailsUiEvent.AddToCart(

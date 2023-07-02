@@ -63,12 +63,10 @@ class CartFragment : Fragment() {
                 val state = viewModel.uiState.collectAsState().value
                 ArticlesList(
                     state.articles,
-                    state.cart,
                     imagePath = directory.absolutePath,
-                    cartClickListener = { increase, id ->
-                        viewModel.setEvent(CartModel.CartUiEvent.AddToCart(increase, id))
+                    cartClickListener = { increase, article ->
+                        viewModel.setEvent(CartModel.CartUiEvent.AddToCart(increase, article))
                     })
-
             }
         }
     }

@@ -18,13 +18,12 @@ import dagger.hilt.android.lifecycle.HiltViewModel;
 @HiltViewModel
 public class RefactoredHomeViewModel extends ViewModel {
 
-    private ArticlesRepository articlesRepository;
+    private final ArticlesRepository articlesRepository;
     private HomeEventsCallback callback;
 
     @Inject
     public RefactoredHomeViewModel(ArticlesRepository repository) {
         this.articlesRepository = repository;
-
     }
 
     public void init(HomeEventsCallback callback) {
@@ -39,9 +38,22 @@ public class RefactoredHomeViewModel extends ViewModel {
         articlesRepository.readAllArticles(new ArticlesRepositoryImpl.RepositoryCallback<List<ArticleEntity>>() {
             @Override
             public void onComplete(Result<List<ArticleEntity>> result) {
-                callback.onFetched(result);
+                try {
+                    if (result instanceof Result.Success) {
+                        callback.onFetched(((Result.Success<List<ArticleEntity>>) result).data);
+                    } else {
+                        callback.onError("Oops, something went wrong");
+                    }
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
             }
         });
+    }
+
+    public void cartAction(ArticleEntity article, Boolean shouldIncrease) {
+        article.cartAction(shouldIncrease);
+        articlesRepository.updateArticle(article);
     }
 
     public void addNewArticle(ArticleEntity article) {

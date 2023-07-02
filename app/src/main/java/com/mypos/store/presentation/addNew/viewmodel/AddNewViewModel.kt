@@ -9,7 +9,7 @@ import com.mypos.store.domain.articles.model.ArticleEntity
 import com.mypos.store.domain.articles.repository.ArticlesRepository
 import com.mypos.store.presentation.addNew.model.AddNewModel.*
 import com.mypos.store.presentation.base.viewmodel.BaseViewModel
-import com.mypos.store.presentation.ui.articles.readImage
+import com.mypos.store.presentation.ui.cart.readImage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
@@ -44,7 +44,7 @@ class AddNewViewModel @Inject constructor(
                             )
                         }
 
-                        article?.let { repository.updateArticle(it) }
+                        article?.let { repository.updateArticleSuspend(it) }
 
                         setState { copy(isLoading = false, image = null) }
                         setEffect(AddNewUiSideEffect.Saved)
@@ -63,7 +63,7 @@ class AddNewViewModel @Inject constructor(
                             price = event.price,
                             id = 0
                         )
-                        val id = repository.addArticle(article)
+                        val id = repository.addArticleSuspend(article)
 
                         if (uiState.value.image != null) {
                             repository.saveToInternalStorage(
@@ -88,7 +88,7 @@ class AddNewViewModel @Inject constructor(
             is AddNewUiEvent.StartEditMode -> {
                 setState { copy(isLoading = true) }
 
-                repository.getArticleById(event.id).collect() {
+                repository.getArticleByIdSuspend(event.id).collect() {
 
                     val cw = ContextWrapper(context)
                     val directory = cw.getDir("articlesImages", Context.MODE_APPEND)

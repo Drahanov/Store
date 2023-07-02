@@ -1,7 +1,6 @@
 package com.mypos.store.presentation.ui.cart
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.height
@@ -14,22 +13,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.mypos.store.R
 import com.mypos.store.domain.articles.model.ArticleEntity
-import com.mypos.store.presentation.ui.articles.ArticleItem
 
 @Composable
 fun ArticlesList(
     articles: List<ArticleEntity>,
-    cartState: HashMap<Int, Int>,
-    cartClickListener: (increase: Boolean, id: Int) -> Unit,
+    cartClickListener: (increase: Boolean, article: ArticleEntity) -> Unit,
     imagePath: String
 ) {
-    if (cartState.isEmpty()) {
+    val articlesInCart = articles.filter {
+        it.amountInCart > 0
+    }
+    if (articlesInCart.isEmpty()) {
 
         Box(
             contentAlignment = Alignment.Center,
@@ -54,19 +53,15 @@ fun ArticlesList(
         }
     } else {
         LazyColumn(modifier = Modifier.padding(vertical = 4.dp)) {
-            items(items = articles) { article ->
-                if (cartState.containsKey(article.id) && cartState[article.id] != 0) {
-                    cartState[article.id]?.let {
-                        ArticleItem(
-                            article,
-                            it,
-                            cartClickListener,
-                            {},
-                            imagePath
-                        )
-                    }
-                }
+            items(items = articlesInCart) { article ->
+                ArticleItem(
+                    article,
+                    cartClickListener,
+                    {},
+                    imagePath
+                )
             }
         }
     }
 }
+

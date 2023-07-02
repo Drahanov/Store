@@ -3,16 +3,13 @@ package com.mypos.store.presentation.ui.details
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -40,7 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mypos.store.R
 import com.mypos.store.domain.articles.model.ArticleEntity
-import com.mypos.store.presentation.ui.articles.readImage
+import com.mypos.store.presentation.ui.cart.readImage
 import java.io.FileNotFoundException
 
 
@@ -52,7 +49,6 @@ fun convertImageByteArrayToBitmap(imageData: ByteArray): Bitmap {
 @Composable
 fun ArticleDetailsItem(
     article: ArticleEntity,
-    amountInCart: Int,
     cartButtonListener: (increase: Boolean, id: Int) -> Unit,
     onDeleteClick: (article: ArticleEntity) -> Unit,
     onUpdateClick: (id: Int) -> Unit,
@@ -144,7 +140,7 @@ fun ArticleDetailsItem(
                         }
 
                         Text(
-                            text = if (amountInCart != 0) (amountInCart * article.price).toString() + "$" else article.price.toString() + "$",
+                            text = if (article.amountInCart != 0) (article.amountInCart * article.price).toString() + "$" else article.price.toString() + "$",
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
                         )
@@ -163,7 +159,7 @@ fun ArticleDetailsItem(
                                 tint = Color.Black
                             )
                         }
-                        Text(text = amountInCart.toString())
+                        Text(text = article.amountInCart.toString())
                         IconButton(
                             onClick = { cartButtonListener.invoke(true, article.id) },
                         ) {

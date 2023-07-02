@@ -2,7 +2,6 @@ package com.mypos.store.presentation.details.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.mypos.store.domain.articles.repository.ArticlesRepository
-import com.mypos.store.domain.cart.repository.CartRepository
 import com.mypos.store.presentation.base.viewmodel.BaseViewModel
 import com.mypos.store.presentation.details.model.DetailsModel.*
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -12,7 +11,6 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     private val articlesRepository: ArticlesRepository,
-    private val cartRepository: CartRepository
 ) : BaseViewModel<DetailsUiState, DetailsUiEvent, DetailsEffect>(
     DetailsUiState()
 ) {
@@ -23,27 +21,23 @@ class DetailsViewModel @Inject constructor(
                 setState { copy(isLoading = true) }
                 viewModelScope.launch {
                     event.id?.let {
-                        articlesRepository.getArticleById(it).collect {
+                        articlesRepository.getArticleByIdSuspend(it).collect {
                             setState { copy(articleEntity = it) }
                         }
 
                         setState { copy(isLoading = false) }
                     }
                 }
-
-                viewModelScope.launch {
-                    cartRepository.cartState.collect {
-                        setState { copy(amountInCart = it) }
-                    }
-                }
             }
 
             is DetailsUiEvent.AddToCart -> {
-                cartRepository.addToCart(event.id, event.shouldIncrease)
+                val article = uiState.value.articleEntity?.copy()
+                article?.cartAction(event.shouldIncrease)
+                article?.let { articlesRepository.updateArticleSuspend(it) }
             }
 
             is DetailsUiEvent.Delete -> {
-                articlesRepository.removeArticle(event.article)
+                articlesRepository.removeArticleSuspend(event.article)
                 setEffect(DetailsEffect.NotifyDeleteItem(event.article))
             }
         }

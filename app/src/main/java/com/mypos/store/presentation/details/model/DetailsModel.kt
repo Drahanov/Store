@@ -10,7 +10,6 @@ class DetailsModel {
     data class DetailsUiState(
         val isLoading: Boolean = false,
         val articleEntity: ArticleEntity? = null,
-        val amountInCart: HashMap<Int, Int> = HashMap()
     ) : UiState
 
     sealed class DetailsUiEvent : UiEvent {

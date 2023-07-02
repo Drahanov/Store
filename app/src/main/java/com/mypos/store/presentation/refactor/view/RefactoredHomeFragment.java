@@ -29,6 +29,7 @@ import com.mypos.store.presentation.refactor.view.adapter.ClickListener;
 import com.mypos.store.presentation.refactor.viewmodel.RefactoredHomeViewModel;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -47,7 +48,7 @@ public class RefactoredHomeFragment extends Fragment implements View.OnClickList
     private ProgressBar progressBar;
     private ArticlesAdapter adapter;
 
-    RefactoredHomeViewModel viewModel;
+    private RefactoredHomeViewModel viewModel;
 
     @Inject
     ArticlesRepository articlesRepository;
@@ -82,14 +83,17 @@ public class RefactoredHomeFragment extends Fragment implements View.OnClickList
 
         adapter = new ArticlesAdapter(new ArrayList<ArticleEntity>(), new ClickListener() {
             @Override
-            public void onArticleClick(ArticleEntity article) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("productId", article.getId());
-                Navigation.findNavController(view).navigate(
-                        R.id.action_refactoredHomeFragment_to_detailsFragment, bundle
-                );
+            public void onArticleClick(int articleId) {
+                openDetails(articleId);
+            }
+
+            @Override
+            public void onCartActionClick(ArticleEntity article, boolean isIncreased) {
+                viewModel.cartAction(article, isIncreased);
+                onArticleUpdated(article);
             }
         });
+
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
     }
@@ -115,23 +119,15 @@ public class RefactoredHomeFragment extends Fragment implements View.OnClickList
         }
     }
 
-
     @Override
-    public void onFetched(Result result) {
+    public void onFetched(List<ArticleEntity> articles) {
         progressBar.setVisibility(View.GONE);
-
-        if (result instanceof Result.Success) {
-            adapter.addMultipleItems(((Result.Success<List<ArticleEntity>>) result).data);
-        } else {
-            Toast.makeText(requireContext(), "Oops, something went wrong", Toast.LENGTH_SHORT).show();
-        }
+        adapter.addMultipleItems(articles);
     }
 
     @Override
     public void onArticleAdded(ArticleEntity article) {
-        if (adapter != null) {
-            adapter.addNewItem(article);
-        }
+        adapter.addNewItem(article);
     }
 
     @Override
@@ -141,14 +137,24 @@ public class RefactoredHomeFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onArticleUpdated(ArticleEntity article) {
-
         adapter.updateItem(article);
+    }
+
+    @Override
+    public void onError(String message) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
+    public void openDetails(int id) {
+        Bundle bundle = new Bundle();
+        bundle.putInt("productId", id);
+        Navigation.findNavController(view).navigate(
+                R.id.action_refactoredHomeFragment_to_detailsFragment, bundle
+        );
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // to handle memory leaks
-        viewModel.onDestroy();
     }
 }

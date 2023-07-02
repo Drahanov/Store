@@ -46,24 +46,24 @@ class ArticlesRepositoryImpl @Inject constructor(
         articlesDao.readAllArticles()
     }
 
-    override suspend fun readAllArticlesFlow(): Flow<List<ArticleEntity>> {
-        return articlesDao.readAllArticlesFlow()
+    override suspend fun readAllArticlesSuspend(): Flow<List<ArticleEntity>> {
+        return articlesDao.readAllArticlesSuspend()
     }
 
-    override suspend fun addArticle(articleEntity: ArticleEntity): Long {
-        return articlesDao.addArticle(articleEntity)
+    override suspend fun addArticleSuspend(articleEntity: ArticleEntity): Long {
+        return articlesDao.addArticleSuspend(articleEntity)
     }
 
-    override suspend fun removeArticle(articleEntity: ArticleEntity) {
-        articlesDao.removeArticle(articleEntity)
+    override suspend fun removeArticleSuspend(articleEntity: ArticleEntity) {
+        articlesDao.removeArticleSuspend(articleEntity)
     }
 
-    override suspend fun updateArticle(articleEntity: ArticleEntity) {
-        articlesDao.updateArticle(articleEntity)
+    override suspend fun updateArticleSuspend(articleEntity: ArticleEntity) {
+        articlesDao.updateArticleSuspend(articleEntity)
     }
 
-    override suspend fun getArticleById(id: Int): Flow<ArticleEntity> {
-        return articlesDao.getArticleByIdFlow(id)
+    override suspend fun getArticleByIdSuspend(id: Int): Flow<ArticleEntity> {
+        return articlesDao.getArticleByIdSuspend(id)
     }
 
     override fun saveToInternalStorage(bitmapImage: Bitmap, id: Int): String? {
@@ -86,4 +86,7 @@ class ArticlesRepositoryImpl @Inject constructor(
         return directory.absolutePath
     }
 
+    override fun updateArticle(articleEntity: ArticleEntity) {
+        articlesDao.updateArticle(articleEntity)
+    }
 }

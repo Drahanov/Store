@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.mypos.store.R;
 import com.mypos.store.domain.articles.model.ArticleEntity;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHolder> {
@@ -25,6 +26,8 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
         private final ImageView image;
         private final TextView amountInCart;
         private final View view;
+        private final ImageView addToCart;
+        private final ImageView removeFromCart;
 
         public ViewHolder(View view) {
             super(view);
@@ -34,6 +37,8 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
             description = view.findViewById(R.id.articleDescription);
             image = view.findViewById(R.id.imageView);
             amountInCart = view.findViewById(R.id.amountInCartTV);
+            addToCart = view.findViewById(R.id.addToCartImage);
+            removeFromCart = view.findViewById(R.id.removeFromCartImage);
             this.view = view;
         }
 
@@ -61,6 +66,14 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
             return view;
         }
 
+        public ImageView getAddToCart() {
+            return addToCart;
+        }
+
+        public ImageView getRemoveFromCart() {
+            return removeFromCart;
+        }
+
     }
 
     public ArticlesAdapter(List<ArticleEntity> articles, ClickListener clickListener) {
@@ -78,16 +91,32 @@ public class ArticlesAdapter extends RecyclerView.Adapter<ArticlesAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, final int position) {
-        String price = Double.toString(articles.get(position).getPrice()) + "$";
+        ArticleEntity article = articles.get(position);
+
+        String price = Double.toString(article.getPrice()) + "$";
         viewHolder.getPrice().setText(price);
-        viewHolder.getName().setText(articles.get(position).getName());
-        viewHolder.getAmountInCart().setText(String.valueOf(articles.get(position).getAmountInCart()));
-        viewHolder.getDescription().setText(articles.get(position).getShortDescription());
+        viewHolder.getName().setText(article.getName());
+        viewHolder.getAmountInCart().setText(String.valueOf(article.getAmountInCart()));
+        viewHolder.getDescription().setText(article.getShortDescription());
 
         viewHolder.getView().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                clickListener.onArticleClick(articles.get(position));
+                clickListener.onArticleClick(article.getId());
+            }
+        });
+
+        viewHolder.getAddToCart().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickListener.onCartActionClick(article, true);
+            }
+        });
+
+        viewHolder.getRemoveFromCart().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickListener.onCartActionClick(article, false);
             }
         });
     }

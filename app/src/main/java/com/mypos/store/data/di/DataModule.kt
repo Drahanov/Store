@@ -5,10 +5,8 @@ import android.os.Handler
 import androidx.room.Room
 import com.mypos.store.data.articles.dao.ArticlesDao
 import com.mypos.store.data.articles.repository.ArticlesRepositoryImpl
-import com.mypos.store.data.cart.CartRepositoryImpl
 import com.mypos.store.data.database.StoreDatabase
 import com.mypos.store.domain.articles.repository.ArticlesRepository
-import com.mypos.store.domain.cart.repository.CartRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -48,10 +46,6 @@ object DataModule {
         handler: Handler
     ): ArticlesRepository =
         ArticlesRepositoryImpl(dao, context, threadPoolExecutor, handler)
-
-    @Singleton
-    @Provides
-    fun provideCartRepository(): CartRepository = CartRepositoryImpl()
 
     private val NUMBER_OF_CORES = Runtime.getRuntime().availableProcessors()
     private val workQueue: BlockingQueue<Runnable> = LinkedBlockingQueue()

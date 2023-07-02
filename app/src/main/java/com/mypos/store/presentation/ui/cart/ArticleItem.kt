@@ -1,7 +1,5 @@
-package com.mypos.store.presentation.ui.articles
+package com.mypos.store.presentation.ui.cart
 
-import android.content.Context
-import android.content.ContextWrapper
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
@@ -61,8 +59,7 @@ fun readImage(id: Int, path: String): Bitmap {
 @Composable
 fun ArticleItem(
     article: ArticleEntity,
-    amountInCart: Int,
-    cartButtonListener: (increase: Boolean, id: Int) -> Unit,
+    cartButtonListener: (increase: Boolean, article: ArticleEntity) -> Unit,
     onClickArticle: (id: Int) -> Unit,
     imagePath: String
 ) {
@@ -136,7 +133,7 @@ fun ArticleItem(
                             text = article.shortDescription
                         )
                         Text(
-                            text = if (amountInCart != 0) (amountInCart * article.price).toString() + "$" else article.price.toString() + "$",
+                            text = if (article.amountInCart != 0) (article.amountInCart * article.price).toString() + "$" else article.price.toString() + "$",
                             fontWeight = FontWeight.Bold,
                             fontSize = 16.sp,
                             modifier = Modifier
@@ -149,7 +146,7 @@ fun ArticleItem(
                         verticalArrangement = Arrangement.Center
                     ) {
                         IconButton(
-                            onClick = { cartButtonListener.invoke(true, article.id) },
+                            onClick = { cartButtonListener.invoke(true, article) },
                         ) {
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowUp,
@@ -157,9 +154,9 @@ fun ArticleItem(
                                 tint = Color.Black
                             )
                         }
-                        Text(text = amountInCart.toString())
+                        Text(text = article.amountInCart.toString())
                         IconButton(
-                            onClick = { cartButtonListener.invoke(false, article.id) },
+                            onClick = { cartButtonListener.invoke(false, article) },
                         ) {
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowDown,

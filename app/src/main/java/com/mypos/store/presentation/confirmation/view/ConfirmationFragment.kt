@@ -31,7 +31,7 @@ class ConfirmationFragment : BottomSheetDialogFragment() {
         binding.button.setOnClickListener {
             viewModel.setEvent(ConfirmationModel.ConfirmationUiEvent.ConfirmOrder)
             Toast.makeText(requireContext(), "Ordered!", Toast.LENGTH_LONG).show()
-            this.dismiss()
+//            this.dismiss()
         }
         return binding.root
     }
